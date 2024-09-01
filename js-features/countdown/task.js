@@ -1,6 +1,6 @@
 const timer = document.getElementById('timer');
 let timeHMS = new Date();
-timeHMS.setHours(0,0,5);
+timeHMS.setHours(0,0,59);
 let time = timeHMS.getHours() * 3600 + timeHMS.getMinutes() * 60 + timeHMS.getSeconds();
 timer.innerText = timeHMS.toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
 
