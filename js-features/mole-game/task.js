@@ -15,13 +15,13 @@ function playing() {
                 lostCount++;
                 lostCounter.innerHTML = lostCount;
             }
-            if (deadCount > 9) {
+            if (deadCount > 10) {
                 alert('Вы победили!');
                 deadCount = 0;
                 lostCount = 0;
                 deadCounter.innerHTML = deadCount;
                 lostCounter.innerHTML = lostCount;
-            } else if (lostCount > 3) {
+            } else if (lostCount > 5) {
                 alert('Вы проиграли!');
                 deadCount = 0;
                 lostCount = 0;
