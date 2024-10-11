@@ -1,8 +1,6 @@
 const dropdownList = document.querySelectorAll('.dropdown__list');
 const dropdownValue = document.querySelectorAll('.dropdown__value');
 
-console.log(Array.from(dropdownValue));
-
 
 Array.from(dropdownValue).forEach((item) => {
     item.addEventListener('click', () => {
