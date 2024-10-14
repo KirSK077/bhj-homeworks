@@ -24,7 +24,7 @@ fontSizes.forEach((fontSize) => {
         fontSize.classList.add('font-size_active');
 
         books.forEach((book) => {
-            book.classList.remove('book_fs-big', 'book_fs-small');
+            book.classList.remove(...booksFSCollection);
         });
 
         books[0].classList.add(booksFSCollection[activeFontSize]);
