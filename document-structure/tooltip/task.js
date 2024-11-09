@@ -1,45 +1,47 @@
 const tooltip = document.querySelectorAll('.has-tooltip');
 
-
+// Функция добавления всплывающей подсказки
+function addTooltip(event) {
+    const tooltipBox = document.createElement('div');
+    tooltipBox.classList.add('tooltip', 'tooltip_active');
+    tooltipBox.textContent = event.target.getAttribute('title');
+    tooltipBox.setAttribute('data-position', 'bottom');
+    event.target.after(tooltipBox);
+    const rect = event.target.getBoundingClientRect();
+    // console.log(rect);
+    // console.log(tooltipBox.offsetHeight, tooltipBox.offsetWidth);
+    switch (tooltipBox.getAttribute('data-position')) {
+        case 'left':
+            tooltipBox.style.top = `${rect.y - rect.height / 4}px`
+            tooltipBox.style.left = `${rect.x - tooltipBox.offsetWidth > 0 ? rect.x - tooltipBox.offsetWidth : 0}px`;
+            break;
+        case 'right':
+            tooltipBox.style.top = `${rect.top - rect.height / 4}px`;
+            tooltipBox.style.left = `${rect.right + tooltipBox.offsetWidth > window.innerWidth ? window.innerWidth - tooltipBox.offsetWidth : rect.right}px`;
+            break;
+        case 'top':
+            tooltipBox.style.top = `${rect.top - rect.height * 1.5}px`;
+            tooltipBox.style.left = `${rect.x + (rect.width - tooltipBox.offsetWidth) / 2}px`;
+            break;
+        case 'bottom':
+            tooltipBox.style.top = `${rect.bottom}px`;
+            tooltipBox.style.left = `${rect.x + (rect.width - tooltipBox.offsetWidth) / 2}px`;
+            break;
+    } 
+}
+// Добавление всплывающей подсказки при нажатии на ссылку
 tooltip.forEach(el => {
     el.addEventListener('click', (event) => {
-
         event.preventDefault();
-        
-        const tooltipText = event.target.getAttribute('title');
-        const tooltipBox = document.createElement('div');
-        tooltipBox.classList.add('tooltip', 'tooltip_active');
-        tooltipBox.textContent = tooltipText;
-        
-        event.target.append(tooltipBox);
-
-        tooltipBox.setAttribute('data-position', 'bottom');
-        const rect = event.target.getBoundingClientRect();
-        console.log(rect);
-        console.log(tooltipBox.offsetHeight, tooltipBox.offsetWidth, tooltipBox.offsetHeight);
-        switch (tooltipBox.getAttribute('data-position')) {
-            case 'left':
-                tooltipBox.style.top = `${rect.top - tooltipBox.offsetHeight / 4}px`
-                tooltipBox.style.left = `${rect.left < tooltipBox.offsetWidth ? rect.width : rect.left - tooltipBox.offsetWidth}px`;
-                break;
-            case 'right':
-                tooltipBox.style.top = `${rect.top - tooltipBox.offsetHeight / 4}px`;
-                tooltipBox.style.left = `${rect.right}px`;
-                break;
-            case 'top':
-                tooltipBox.style.top = `${rect.top - tooltipBox.offsetHeight}px`;
-                tooltipBox.style.left = `${rect.left + (rect.width - tooltipBox.offsetWidth) / 2}px`;
-                break;
-            case 'bottom':
-                tooltipBox.style.top = `${rect.bottom}px`;
-                tooltipBox.style.left = `${rect.left + (rect.width - tooltipBox.offsetWidth) / 2}px`;
-                break;
-        }
-
-        document.addEventListener('click', (event) => {
-            if (!el.contains(event.target)) {
-                tooltipBox.classList.remove('tooltip_active');
-              }
-        })
-    })
+        document.querySelectorAll('.tooltip').forEach(el => el.remove());
+        addTooltip(event);
+    });
+});
+// Удаление всплывающей подсказки при нажатии в любом месте странцы
+document.addEventListener('click', (event) => {
+    if (!event.target.classList.contains('has-tooltip')) {
+        document.querySelectorAll('.tooltip').forEach(el => {
+            el.remove();
+        });
+    }
 });
