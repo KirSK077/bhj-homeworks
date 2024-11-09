@@ -1,59 +1,50 @@
 const tasksInput = document.querySelector('#task__input');
 const tasksList = document.querySelector('#tasks__list');
 const tasksForm = document.querySelector('#tasks__form');
-const taskRemove = document.querySelectorAll('.task__remove');
+const taskArray = [];
 
 // Функция создания задачи
-function addTask() {
-    const task = document.createElement('div');
-    task.classList.add('task');
-    
-    task.innerHTML = `
-        <div class="task__title">${tasksInput.value}</div>
+function addTask(task) {
+    const element = document.createElement('div');
+    element.classList.add('task');
+    element.innerHTML = `
+        <div class="task__title">${task}</div>
         <a href="#" class="task__remove">&times;</a>
     `;
-    localStorage.setItem(tasksInput.value, tasksInput.value);
-    tasksList.append(task);
-    
+    taskArray.push(task);
+    tasksList.append(element);
     tasksInput.value = '';
 }
 // Функция удаления задачи
 function removeTask(event) {
     if (event.target.classList.contains('task__remove')) {
         event.target.closest('.task').remove();
-        localStorage.removeItem(event.target.closest('.task').querySelector('.task__title').textContent);
-    }
+    }       
 }
 
 // Обработка события добавления задачи при нажатии на кнопку "Добавить"
 tasksForm.addEventListener('submit', (event) => {
-    if (tasksInput.value !== '') {
+    if (tasksInput.value.trim() !== '') {
         event.preventDefault();
-        addTask();
+        addTask(tasksInput.value.trim());
+        localStorage.setItem('task', JSON.stringify(taskArray));
     }
 })
-// Обработка события добавления задачи при нажатии на клавишу "Enter"
-tasksInput.addEventListener('keydown' , (event) => {
-    if (event.key === 'Enter' && tasksInput.value !== '') {
-        event.preventDefault();
-        addTask();
-    }
-})
+
 // Обработка события удаления
-tasksList.addEventListener('click', removeTask)
+tasksList.addEventListener('click', (event) =>{
+    removeTask(event);
+    taskArray.splice(taskArray.indexOf(event.target.closest('.task').querySelector('.task__title').textContent), 1);
+    localStorage.setItem('task', JSON.stringify(taskArray));
+})
 
 
 // Функция перезагрузки страницы с восстановлением задач из localStorage
 function reload() {
-    for (let i = 0; i < localStorage.length; i++) {
-        const task = document.createElement('div');
-        task.classList.add('task');
-        
-        task.innerHTML = `
-            <div class="task__title">${localStorage.getItem(localStorage.key(i))}</div>
-            <a href="#" class="task__remove">&times;</a>
-        `;
-        tasksList.append(task);
+    if (localStorage.getItem('task')) {
+        JSON.parse(localStorage.getItem('task')).forEach(item => {
+            addTask(item);
+        })
     }
 }
 reload()
