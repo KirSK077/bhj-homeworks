@@ -48,7 +48,6 @@ function showStatistic(data) {
     const statPercent = data.stat.map(el => el.votes / summary * 100);
     const stat = data.stat.map((el, index) => {
         const item = document.createElement('div');
-        item.classList.add('poll__statistic-item');
         item.innerHTML = `
             <div>
             <p style="display: inline">${el.answer}: <span style="font-weight: bold">${statPercent[index].toFixed(2)}%</span></p>
@@ -57,7 +56,6 @@ function showStatistic(data) {
         return item;
     });
     const statistic = document.createElement('div');
-    statistic.classList.add('poll__statistic');
     statistic.append(...stat);
     pollAnswers.replaceChildren(statistic);
 }
