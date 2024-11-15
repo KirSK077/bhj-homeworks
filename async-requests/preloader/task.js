@@ -2,20 +2,23 @@ let url = 'https://students.netoservices.ru/nestjs-backend/slow-get-courses';
 
 fetch(url)
     .then(response => response.json())
-    .then(json => {
-        cache(json);
+    .then(json => cache(json))
+    .then(() => {
+        removeLoader(); 
         showCurrency();
     })
     .catch(error => {
-        console.log(console.log('Fetch Error :', error))
+        console.log(console.log('Fetch Error :', error));
+    }).finally(() => {
+        removeLoader();
+        showCurrency();
     });
 // Функция отображения данных
 function showCurrency() {
     if (!localStorage.getItem('Curency')) {
         return;
-    }
-    removeLoader(); 
-    let data = JSON.parse(localStorage.getItem('Curency'));
+    } 
+    const data = JSON.parse(localStorage.getItem('Curency'));
     data.forEach(item => {
         let div = document.createElement('div');
         div.classList.add('item');
@@ -33,7 +36,6 @@ function removeLoader() {
 }
 // Функция кэширования данных
 function cache(response) {
-    let cachedData = Object.keys(response['response']['Valute']).map(key => response['response']['Valute'][key]);
-    localStorage.setItem('Curency', JSON.stringify(cachedData));
+    let cachedCurrency = Object.keys(response['response']['Valute']).map(key => response['response']['Valute'][key]);
+    localStorage.setItem('Curency', JSON.stringify(cachedCurrency));
 }
-
