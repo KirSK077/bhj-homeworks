@@ -1,11 +1,13 @@
-let modal = document.querySelector('.modal')
-window.onload = function () {
-    if (localStorage.getItem('modalClosed') === 'true') return
-    modal.classList.add('modal_active')
-    localStorage.setItem('modalClosed', 'false')
+const modal = document.querySelector('.modal');
+const modalCloseBtn = document.querySelector('.modal__close');
+
+
+window.onload = () => {
+    if (document.cookie.split(';').includes('modalClose=true')) return
+    modal.classList.add('modal_active');
 }
 
-modal.querySelector('.modal__close').onclick = function () {
-    modal.classList.remove('modal_active')
-    localStorage.setItem('modalClosed', 'true')
-}
+modalCloseBtn.addEventListener('click', () => {
+    modal.classList.remove('modal_active');
+    document.cookie = 'modalClose=true';
+})
